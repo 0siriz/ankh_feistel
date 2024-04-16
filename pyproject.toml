@@ -11,6 +11,9 @@ pycryptodome = "^3.20.0"
 numpy = "^1.26.4"
 
 
+[tool.poetry.group.test.dependencies]
+pytest = "^8.1.1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

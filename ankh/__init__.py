@@ -4,8 +4,6 @@ from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
 import numpy as np
 
-__version__ = "0.1.0"
-
 
 class Ankh:
     BLOCKSIZE: int = 16

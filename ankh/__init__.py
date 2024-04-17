@@ -7,7 +7,7 @@ import numpy as np
 
 class Ankh:
     BLOCKSIZE: int = 16
-    NUMBEROFROUNDS: int = 20
+    NUMBEROFROUNDS: int = 2000
     subkeys: list[bytes] = []
 
     def __init__(self, key: bytes):

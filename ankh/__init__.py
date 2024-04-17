@@ -12,18 +12,22 @@ class Ankh:
 
     def __init__(self, key: bytes):
         self.key = key
-        self._generate_subkeys()
+        self.subkeys: list[bytes] = self._generate_subkeys()
 
     def _xor(self, data: bytes, key: bytes) -> bytes:
         assert len(data) == len(key)
 
         return bytes(a ^ b for a, b in zip(data, key))
 
-    def _generate_subkeys(self):
+    def _generate_subkeys(self) -> list[bytes]:
         rng: np.random.Generator = np.random.default_rng(
-            bytes_to_long(self.key))
+            bytes_to_long(SHA3_256.new(self.key).digest())
+        )
+        subkeys: list[bytes] = []
         for i in range(self.NUMBEROFROUNDS):
-            self.subkeys.append(rng.bytes(int(self.BLOCKSIZE/2)))
+            subkeys.append(rng.bytes(int(self.BLOCKSIZE/2)))
+
+        return subkeys
 
     def _split_into_blocks(self, data: bytes) -> list[bytes]:
         assert len(data) % self.BLOCKSIZE == 0

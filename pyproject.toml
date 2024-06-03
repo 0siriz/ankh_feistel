@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ankh"
-version = "0.1.0"
+version = "0.2.0"
 description = "A block cipher using a HMAC feistel network"
 authors = ["Osiriz <0siriz@proton.me>"]
 readme = "README.md"

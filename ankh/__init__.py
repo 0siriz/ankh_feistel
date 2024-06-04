@@ -36,7 +36,7 @@ class Ankh:
         )
         subkeys: list[bytes] = []
         for i in range(self.NUMBEROFROUNDS):
-            subkeys.append(rng.bytes(int(self.BLOCKSIZE/2)))
+            subkeys.append(rng.bytes(self.BLOCKSIZE//2))
 
         return subkeys
 
@@ -50,11 +50,11 @@ class Ankh:
         return blocks
 
     def _feistel_network(self, block: bytes, decryption: bool) -> bytes:
-        left = block[:int(self.BLOCKSIZE/2)]
-        right = block[int(self.BLOCKSIZE/2):]
+        left = block[:self.BLOCKSIZE//2]
+        right = block[self.BLOCKSIZE//2:]
         for i, subkey in enumerate(self.subkeys[::-1 if decryption else 1]):
             fright = HMAC.new(subkey, right, digestmod=SHA3_256).digest()
-            left = self._xor(left, fright[:int(self.BLOCKSIZE/2)])
+            left = self._xor(left, fright[:self.BLOCKSIZE//2])
             left, right = right, left
 
         return right+left

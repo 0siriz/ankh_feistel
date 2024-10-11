@@ -4,15 +4,16 @@ from Crypto.Util.Padding import pad
 from Crypto.Random import get_random_bytes
 
 
-# Fixture to dynamically generate keys of a given length
+# Fixture to dynamically generate keys of a given length in bits
 @pytest.fixture
 def key(request):
-    length = request.param
-    return get_random_bytes(length)
+    key_length_bits = request.param
+    key_length_bytes = key_length_bits // 8  # Convert bits to bytes
+    return get_random_bytes(key_length_bytes)
 
 
-# Test subkey generation for different key lengths
-@pytest.mark.parametrize("key", [1, 2, 4, 8, 16, 24, 32], indirect=True)  # Small keys + 128-bit, 192-bit, 256-bit
+# Test subkey generation for different key lengths specified in bits
+@pytest.mark.parametrize("key", [8, 16, 32, 64, 128, 192, 256], indirect=True)  # Key sizes in bits
 def test_subkey_generation(key):
     cipher = Ankh(key, Ankh.Mode.ECB)
 
@@ -22,8 +23,8 @@ def test_subkey_generation(key):
     assert all(len(subkey) == cipher.BLOCKSIZE // 2 for subkey in cipher.subkeys)
 
 
-# Test block splitting with different key lengths
-@pytest.mark.parametrize("key", [1, 2, 4, 8, 16, 24, 32], indirect=True)  # Small keys + 128-bit, 192-bit, 256-bit
+# Test block splitting with different key lengths specified in bits
+@pytest.mark.parametrize("key", [8, 16, 32, 64, 128, 192, 256], indirect=True)  # Key sizes in bits
 def test_block_splitting(key):
     cipher = Ankh(key, Ankh.Mode.ECB)
 

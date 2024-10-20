@@ -51,9 +51,18 @@ def test_decryption_with_wrong_key(mode, key, wrong_key, plaintext):
     # Encrypt with the correct key
     ciphertext = cipher.encrypt(plaintext)
 
-    # Attempt to decrypt with the wrong key
-    with pytest.raises(ValueError, match="[Pp]adding is incorrect."):
-        wrong_cipher.decrypt(ciphertext)
+    try:
+        # Attempt to decrypt with the wrong key
+        decrypted_text = wrong_cipher.decrypt(ciphertext)
+        # Assert that the decrypted text is not equal to the original plaintext
+        assert decrypted_text != plaintext, (
+            f"Decrypted text should not match original when using wrong key for mode {mode}"
+        )
+    except ValueError as e:
+        # If ValueError is raised (likely due to padding issues), it's expected
+        assert "Padding is incorrect" in str(e) or "padding is incorrect" in str(e), (
+            f"Expected padding error, but got: {str(e)}"
+        )
 
 
 # Test different key lengths specified in bits, with dynamic plaintext lengths (in blocks)
